@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+   <arg name="gui" default="true"/>
+  <arg name="robot" default="auv"/>
+  
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui" value="true"/>
+        <arg name="paused" value="true"/>
+        <arg name="world_name" value="$(find freefloating_gazebo)/world/underwater.world"/>
+    </include>
+    
+    <node name="surface" pkg="freefloating_gazebo" type="surface.py"
+          args="-x 100 -y 100 -g 0.2 -b 1 -a 0.2"
+          />
+     
+    
+    <group ns="auv">
+         <!-- spawn in Gazebo with GUI -->
+        <param name="robot_description" command="$(find xacro)/xacro $(find auv)/urdf/$(arg robot).xacro"/>
+       <node name="spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model auv -param robot_description -x 3 -y 6.5 -z -10 "/>
+    </group>
+        
+    <!-- spawn terrain -->
+    <param name="terrain_description" command="$(find xacro)/xacro $(find freefloating_gazebo_demo)/terrain/shipwreck/terrain.sdf"/>
+    <node name="terrain_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-sdf -model terrain -param terrain_description -x 0 -y 0 -z 0 -R 0 -P 0 -Y 0"/>
+   
+</launch>

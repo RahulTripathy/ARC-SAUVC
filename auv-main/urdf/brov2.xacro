@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<!-- STL-version of the URDF, used with gazebo for dynamic simulation  -->
+
+<robot name="auv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+        
+<xacro:arg name="use_mesh" default="true"/>
+<xacro:arg name="density" default="1"/>
+
+<xacro:include filename="$(find auv)/urdf/brov2_macro.xacro"/>
+<xacro:generate_bluerov use_mesh="$(arg use_mesh)" density="$(arg density)" x_offset="0.02"/>
+
+</robot>
